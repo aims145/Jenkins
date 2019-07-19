@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+    triggers {
+        cron('*/3 * * * *')
+    }
+   stages{
+       stage('Building'){
+        steps{
+            echo "buidling"
+            
+        }   
+       }
+       stage('Testing'){
+           steps{
+            echo "Testing"
+        }   
+       }
+       stage('Deploying'){
+           steps{
+            echo "Deploying"
+        }   
+       }
+   }
+   post {
+       aborted {
+           emailext attachLog: true, body: '''Hello,
+
+            Job ${JOB_NAME} - ${JOB_URL} is aborted by ${BUILD_USER}. Please take a look to attached Logs. ''', subject: '$JOB_NAME - ${BUILD_NUMBER} Aborted', to: 'aims145@gmail.com'
+       }
+       fixed {
+           emailext attachLog: true, body: '''Hello,
+
+            Job ${JOB_NAME} - ${JOB_URL} is Fixed now ''', subject: '$JOB_NAME - ${BUILD_NUMBER} fixed', to: 'aims145@gmail.com'
+       }
+        failure {
+           emailext attachLog: true, body: '''Hello,
+
+            Job ${JOB_NAME} - ${JOB_URL} is failed now ''', subject: '$JOB_NAME - ${BUILD_NUMBER} failed', to: 'aims145@gmail.com'
+       }
+       
+   }
+}
