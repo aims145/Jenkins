@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+    tools {
+        maven 'M3'
+    }
+    stages {
+        stage('git checkout'){
+            steps{
+            git 'https://github.com/aims145/hello-world-war.git'    
+            }
+            
+        }
+        stage('build maven proj'){
+            steps{
+                sh 'mvn clean'    
+            }
+            
+        }
+        stage('Archive Artifacts'){
+            steps{
+                archiveArtifacts artifacts: 'target/hello-world-war-1.0.0.war', fingerprint: true, onlyIfSuccessful: true
+            }
+        }
+    }
+}
