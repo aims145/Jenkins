@@ -1,0 +1,10 @@
+pipeline {
+    agent any
+    stages{
+        stage('copy artifact'){
+            steps{
+                copyArtifacts filter: 'target/hello-world-war-1.0.0.war', fingerprintArtifacts: true, projectName: 'Job1', selector: lastWithArtifacts(), target: './'
+            }
+        }
+    }
+}
